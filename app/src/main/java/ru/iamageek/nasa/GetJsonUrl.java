@@ -2,6 +2,8 @@ package ru.iamageek.nasa;
 
 //этот класс получает JSON объект напрямую из интернета
 
+//***Этот класс нужно удалить!***
+
 import android.app.DownloadManager;
 
 import com.android.volley.Request;
