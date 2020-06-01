@@ -45,13 +45,13 @@ public class NetworkUtils {
 
 
             InputStream input = urlConnection.getInputStream();
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 //здесь нужно бы оборачивать в условие, пока есть данные
-//            while (reader.readLine() != null) {
-//                String text = reader.readLine();
-//                return text;
-//            }
-
+            while (reader.readLine() != null) {
+                String text = reader.readLine();
+                return text;
+            }
+/*
             Scanner scanner = new Scanner(input);
             scanner.useDelimiter("\\A");
 
@@ -59,11 +59,11 @@ public class NetworkUtils {
             if (hasInput)
                 return scanner.next();
             else return null;
-
+*/
         } finally {
 
             urlConnection.disconnect();
- //           return null;
+            return null;
         }
 
     }
