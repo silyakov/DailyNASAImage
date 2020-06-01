@@ -38,25 +38,6 @@ public class MainActivity extends AppCompatActivity {
     TextView titleView, dateView, descriptionView, copyrightView;
     ImageView imageView;
 
-    class NasaQueryTask extends AsyncTask<URL, Void, String> { // с помощью этого вложенного класса реализуется обращение к сети в другом потоке
-
-        @Override
-        protected String doInBackground(URL... urls) {
-            String response_new = null;
-            try {
-                response_new = getResponseFromURL(urls[0]);
-                System.out.println("String JSON: " + response_new);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return response_new;
-        }
-        @Override
-        protected void onPostExecute(String response) {
-            System.out.println("Response JSON from NASA: " + response);
-//           descriptionView.setText(response);
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("URL: " + url);
 
-        new NasaQueryTask().execute(urlFromNetUtils);
+//        new NasaQueryTask().execute(urlFromNetUtils);
 
 //пример кода с гитхаба для того, чтобы все работало в Main Thread без использования Async Task это если не используем volley
 //*****************************************
@@ -130,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 */
+// метод для получения данных JSON с API сайта
 
     private void getJsonNasaData(String urlM) {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, //GET - API-запрос для получение данных
@@ -170,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
 //код ниже используем для получения изображения с помощью библиотеки volley
 
     private void getImageFromUrl(String url) {
-
 
         ImageRequest imageRequest = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
