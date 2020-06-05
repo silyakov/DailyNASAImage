@@ -2,12 +2,9 @@ package ru.iamageek.nasa;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.DownloadManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,133 +20,78 @@ import org.json.*;
 
 import static ru.iamageek.nasa.utils.NetworkUtils.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.SQLOutput;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RequestQueue mRequestQueue; //RequestQueue переменная для создания очереди запросов volley
-    String url = null;//ссылка на API сайта для получения данных
-    String name, date, explanation, urlImage, copyright;
-    Bitmap imageSpace;
-    TextView titleView, dateView, descriptionView, copyrightView;
-    ImageView imageView;
+    private RequestQueue mRequestQueue; //RequestQueue variable for Volley
+    private String url = null;//variable for link to API
+    private String name, date, explanation, urlImage, copyright;
+    private TextView titleView, dateView, descriptionView, copyrightView;
+    private ImageView imageView;
+    private static final String LOG_TAG = "Log";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        URL urlFromNetUtils = generateURL(); // создаем URL
-        url = urlFromNetUtils.toString();
+        URL urlFromNetUtils = generateURL(); // create URL in NetworkUtils class
+        url = urlFromNetUtils.toString();// cast URL to string for control
 
-        System.out.println("URL: " + url);
+        Log.d(LOG_TAG, "URL: " + url); //Test output for control that URL formed correctly
 
-//        new NasaQueryTask().execute(urlFromNetUtils);
+        mRequestQueue = Volley.newRequestQueue(this); //initialise Volley library for requests queue
+        getJsonNasaData(url); // invoke method to receive JSON data from server
 
-//пример кода с гитхаба для того, чтобы все работало в Main Thread без использования Async Task это если не используем volley
-//*****************************************
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-//*****************************************
-//без куска кода выше ругается и выдает Network exception. С этим кодом все работает в основной активности, но подвешивает немного при старте
-
-        mRequestQueue = Volley.newRequestQueue(this); //задействуем библиотеку Volley для очереди запросов
-        getJsonNasaData(url); //получим данные с сайте в методе
-/*
-// ниже мы используем старый способ получения данных с использованием массива
-
-        ParseJson jsonString = new ParseJson(this);
-        String[] output;
-        try {
-            output = jsonString.parseJsonString();
-            title = output[0];
-            date = output[1];
-            description = output[2];
-            url = output[3];
-            imageSpace = getImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException jse) {
-            jse.printStackTrace();
-        }
-*/
-
-// вставка в шаблон текста
+// here populate view
 
         titleView = (TextView) findViewById(R.id.title); // название снимка
-        dateView = (TextView) findViewById(R.id.dateTaken); // когда снимок сделан
-        copyrightView = (TextView) findViewById(R.id.copyright); // авторские права
-        descriptionView = (TextView) findViewById(R.id.description); // описание снимка на сайте
-        imageView = (ImageView) findViewById(R.id.imageView); // размещение изображения
+        dateView = (TextView) findViewById(R.id.dateView); // когда снимок сделан
+        copyrightView = (TextView) findViewById(R.id.author); // авторские права
+        descriptionView = (TextView) findViewById(R.id.descriptionView); // описание снимка на сайте
+        imageView = (ImageView) findViewById(R.id.cosmicImage); // размещение изображения
 
     }
 
-/*
-//получение изображения с сайта по URL ссылке полученной от сообщения JSON это если использовать стандартный метод не задействуя volley
-
-    public Bitmap getImage() throws IOException {
-
-        try {
-            URL urlR = new URL(urlImage);
-            HttpURLConnection connection = (HttpURLConnection) urlR.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap image = BitmapFactory.decodeStream(input);
-            input.close();
-            return image;
-
-        } catch(IOException e) {
-            System.out.println(e);
-            return null;
-        }
-
-
-    }
-*/
-// метод для получения данных JSON с API сайта
+// method to receive JSON file from NASA server using API
 
     private void getJsonNasaData(String urlM) {
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, //GET - API-запрос для получение данных
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, //GET - request to receive data
                 urlM, null, new Response.Listener<JSONObject>() {
 
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONObject response) {//parse JSON object and retrieve data
+                Log.d(LOG_TAG, "JSON " + response);
                 try {
-                    //парсим json объект response и получаем строки (значения) -
                     name = response.getString("title");
                     date = response.getString("date");
                     urlImage = response.getString("url");
                     explanation = response.getString("explanation");
-//                    copyright = response.getString("copyright");
+                    copyright = response.getString("copyright");
 //проверочный вывод в консоль
-                    System.out.println("Name: "+ name);
-                    System.out.println("Date: "+ date);
-                    System.out.println("Explanation: " + explanation);
-
-                    System.out.println("URL: " + urlImage);
-                    System.out.println("Copyright: " + copyright);//copyright
-                    getImageFromUrl(urlImage); // передаем ссылку на изображение в метод получения контента Bitmap с сайта используя volley
+                    Log.d(LOG_TAG,"Name: "+ name);
+                    Log.d(LOG_TAG, "Date: "+ date);
+                    Log.d(LOG_TAG, "Explanation: " + explanation);
+                    Log.d(LOG_TAG, "URL: " + urlImage);//receive URL string where image is located
+                    Log.d(LOG_TAG, "Copyright: " + copyright);//copyright
+                    getImageFromUrl(urlImage); // call method to download a Bitmap photo from the NASA server
                     setValues();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }, new Response.ErrorListener() { // в случае возникновеня ошибки
+        }, new Response.ErrorListener() { // in case of an error
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
         });
 
-        mRequestQueue.add(request); // добавляем запрос в очередь
+        mRequestQueue.add(request); // add request to the Volley queue
     }
 
-//код ниже используем для получения изображения с помощью библиотеки volley
+//method to download an image in Bitmap format using volley
 
     private void getImageFromUrl(String url) {
 
@@ -170,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
         mRequestQueue.add(imageRequest);
     }
 
-
     private void setValues() {
         titleView.setText(name);
+        copyrightView.setText("Copyright: " + copyright);
         dateView.setText(date);
         descriptionView.setText(explanation);
-        copyrightView.setText(copyright);
+
     }
 }
 

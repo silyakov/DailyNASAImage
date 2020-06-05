@@ -1,17 +1,11 @@
 package ru.iamageek.nasa.utils;
 
 import android.net.Uri;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Scanner;
 
-// класс для сетевых запросов
+// this class forms GET requests
+
 public class NetworkUtils {
 
     private static final String NASA_API_BASE_URL = "https://api.nasa.gov/";
@@ -34,39 +28,5 @@ public class NetworkUtils {
         return url;
 
     }
-
-    public static String getResponseFromURL(URL url) throws IOException {
-
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setDoInput(true);
-        urlConnection.connect();
-
-        try {
-
-
-            InputStream input = urlConnection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-//здесь нужно бы оборачивать в условие, пока есть данные
-            while (reader.readLine() != null) {
-                String text = reader.readLine();
-                return text;
-            }
-/*
-            Scanner scanner = new Scanner(input);
-            scanner.useDelimiter("\\A");
-
-            boolean hasInput = scanner.hasNext();
-            if (hasInput)
-                return scanner.next();
-            else return null;
-*/
-        } finally {
-
-            urlConnection.disconnect();
-            return null;
-        }
-
-    }
-
 
 }
