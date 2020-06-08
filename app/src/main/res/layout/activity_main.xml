@@ -28,7 +28,8 @@
             <ImageView
                 android:id="@+id/cosmicImage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="350dp"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/image_view"/>
 
             <TextView
@@ -36,7 +37,10 @@
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:contentDescription="@string/copyright_view"
-                android:textColor="#95E1F1"/>
+                android:textColor="#38362D"
+                android:gravity="end"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"/>
 
 
             <TextView
@@ -51,7 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/date_view"
-                android:textColor="#95E1F1"
+                android:gravity="right"
+                android:textColor="#43575B"
                 android:textStyle="bold" />
 
         </LinearLayout>

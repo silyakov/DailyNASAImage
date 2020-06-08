@@ -1,13 +1,11 @@
 package ru.iamageek.nasa;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -15,11 +13,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.*;
-
 import static ru.iamageek.nasa.utils.NetworkUtils.*;
-
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
 // here populate view
 
-        titleView = (TextView) findViewById(R.id.title); // название снимка
-        dateView = (TextView) findViewById(R.id.dateView); // когда снимок сделан
-        copyrightView = (TextView) findViewById(R.id.author); // авторские права
-        descriptionView = (TextView) findViewById(R.id.descriptionView); // описание снимка на сайте
-        imageView = (ImageView) findViewById(R.id.cosmicImage); // размещение изображения
+        titleView = (TextView) findViewById(R.id.title); // Post title
+        dateView = (TextView) findViewById(R.id.dateView); // Date of post
+        copyrightView = (TextView) findViewById(R.id.author); // Copyrights
+        descriptionView = (TextView) findViewById(R.id.descriptionView); // Description of image from
+        imageView = (ImageView) findViewById(R.id.cosmicImage); // Insert image into Image View
 
     }
 

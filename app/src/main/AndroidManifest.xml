@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.iamageek.nasa">
-
+    <!-- Permission for the Internet access -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
     <application
@@ -11,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!-- Permission for the Internet access -->
+
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -21,9 +22,7 @@
             </intent-filter>
         </activity>
 
-
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
 </manifest>
